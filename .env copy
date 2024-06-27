@@ -1,0 +1,3 @@
+PORT = 3008
+MONGODB_URLSTRING = mongodb+srv://<user>:<password>@cluster0.g8levrr.mongodb.net/
+DATABASE_NAME = nombre_de_la_coleccion

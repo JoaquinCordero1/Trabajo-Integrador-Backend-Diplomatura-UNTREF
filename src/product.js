@@ -1,12 +1,17 @@
-const { default: mongoose } = require("mongoose");
-const moongose = require("mongoose");
+const mongoose = require("mongoose");
+process.loadEnvFile();
 
-const computerSchema = new mongoose.Schema({
-  codigo: Number,
-  nombre: String,
-  precio: Number,
-  categoria: String,
-});
+const DATABASE_NAME = process.env.DATABASE_NAME;
+
+const computerSchema = new mongoose.Schema(
+  {
+    codigo: Number,
+    nombre: String,
+    precio: Number,
+    categoria: String,
+  },
+  { collection: DATABASE_NAME }
+);
 
 const Computer = mongoose.model("Computer", computerSchema);
 
