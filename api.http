@@ -1,5 +1,9 @@
 ###
-GET http://localhost:3000/
-###
+GET http://localhost:3000/asdasd
+### Obtener toda la lista de los productos
 GET http://localhost:3000/productos
+### Obtener toda la lista de los productos segun su categoria
+GET http://localhost:3000/productos?categoria=desktop
 Content-Type: application/json
+### Obtener un producto por su id (Codigo en la db)
+GET http://localhost:3000/productos/2
