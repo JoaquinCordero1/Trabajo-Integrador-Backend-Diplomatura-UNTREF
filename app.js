@@ -17,19 +17,20 @@ app.get("/", (req, res) => {
 app.get("/productos", (req, res) => {
   const { categoria } = req.query;
 
-  if (!categoria) {
-    return res.send("Debe especificar una categoria");
-  }
+  // Filtrar las categorias discriminando las mayusculas y con coincidencias en la palabra
+  const filter = !categoria
+    ? {}
+    : { categoria: { $regex: `^${categoria.slice(0, 3)}`, $options: "i" } }; // Buscamos las coincidencias con las tres primeras letras
 
-  const filter = categoria.toLowerCase()
-    ? { categoria: categoria.toLowerCase() }
-    : {};
   Computer.find(filter)
     .then((computacion) => {
-      if (filter) {
-        res.json(computacion);
-      } else {
+      if (categoria && computacion.length === 0) {
+        // Si no encuentra productos devuelve el error o si categoria está vacio devuelve todos los productos
+        return res
+          .status(404)
+          .send("No se encontraron productos para la categoria especificada");
       }
+      res.json(computacion);
     })
     .catch((error) => {
       console.log("Error al encontrar productos: ", error);
