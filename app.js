@@ -43,7 +43,7 @@ app.get("/productos", (req, res) => {
         // Si no encuentra productos devuelve el error o si su categoria está vacia devuelve todos los productos
         return res
           .status(404)
-          .send(`La busqueda: ${nombre || categoria} no se encontró`);
+          .send(`La busqueda de: ${nombre || categoria} no se encontró`);
       }
       res.json(computacion);
     })
