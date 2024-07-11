@@ -6,9 +6,9 @@ const DATABASE_NAME = process.env.DATABASE_NAME;
 const computerSchema = new mongoose.Schema(
   {
     codigo: Number,
-    nombre: String,
-    precio: Number,
-    categoria: String,
+    nombre: { type: String, required: true },
+    precio: { type: Number, required: true },
+    categoria: { type: String, required: true },
   },
   { collection: DATABASE_NAME }
 );
