@@ -1,9 +1,28 @@
-###
-GET http://localhost:3000/asdasd
+### Inicio
+GET http://localhost:3000/
+
 ### Obtener toda la lista de los productos
 GET http://localhost:3000/productos
+
 ### Obtener toda la lista de los productos segun su categoria
-GET http://localhost:3000/productos?categoria=desktop
-Content-Type: application/json
+GET http://localhost:3000/productos?categoria=portatiles
+
+### Obtener los productos buscando por su nombre (incluir tildes)
+GET http://localhost:3000/productos?nombre=Cámara web
+
+
 ### Obtener un producto por su id (Codigo en la db)
-GET http://localhost:3000/productos/2
+GET http://localhost:3000/productos/20
+
+### Agregar productos
+POST http://localhost:3000/productos/
+Content-Type: application/json
+
+ {
+    "nombre": "Teclado Programable",
+    "precio": 100,
+    "categoria": "Accesorios"
+ }
+
+###Borrar producto por su _id
+DELETE http://localhost:3000/productos/66902d85289af9fab80ed1f1
