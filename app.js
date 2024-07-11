@@ -9,7 +9,7 @@ process.loadEnvFile();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json("¡Bienvenidos a la API!");
+  res.json("¡Bienvenidos al trabajo intregrador!");
 });
 
 // con /productos accedemos a toda la lista
@@ -27,10 +27,9 @@ app.get("/productos", (req, res) => {
         };
   }
   if (nombre) {
-    filter = !nombre
-      ? {}
-      : { nombre: { $regex: `^${nombre.slice(0, 3)}`, $options: "i" } };
+    filter = !nombre ? {} : { nombre: { $regex: nombre, $options: "i" } };
   }
+  // `^${nombre.slice(0, 3)}`
 
   // Filtrar las categorias discriminando las mayusculas y con coincidencias en la palabra
   // const filtro = !categoria
@@ -75,6 +74,51 @@ app.get("/productos/:id", (req, res) => {
     .catch((error) => {
       console.log("Error al obtener el producto: ", error);
       res.status(500).send("Error al encontrar el producto.");
+    });
+});
+
+//Agregar productos a la base de datos
+
+app.post("/productos", (req, res) => {
+  const newProduct = new Computer(req.body);
+  //Verificar si ya existe un producto con ese nombre
+  Computer.findOne({ nombre: newProduct.nombre }).then((nameProduct) => {
+    if (nameProduct) {
+      return res.status(404).send("Este objeto ya está agregado");
+    }
+
+    newProduct
+      .save()
+      .then((saveNewProduct) => {
+        res.status(201).json(saveNewProduct);
+      })
+      .catch((error) => {
+        console.log("Hubo un error al agregar el producto", error);
+        res.status(500).send("Error al agregar el producto");
+      });
+  });
+});
+
+//Eliminar un producto de la base de datos
+
+app.delete("/productos/:ID", (req, res) => {
+  const { ID } = req.params;
+
+  Computer.findByIdAndDelete(ID)
+    .then((removeProduct) => {
+      if (removeProduct) {
+        console.log("Producto borrado");
+        res.status(204).end();
+      } else {
+        console.log(
+          "Error al borrar el producto. El producto no existe o ya fue eliminado anteriormente"
+        );
+        res.status(404).send("El producto que desea eliminar no se encuentra");
+      }
+    })
+    .catch((error) => {
+      console.error("Error al eliminar el producto", error);
+      res.status(500).send("Error al eliminar el producto");
     });
 });
 
