@@ -12,17 +12,25 @@ GET http://localhost:3000/productos?nombre=Cámara web
 
 
 ### Obtener un producto por su id (Codigo en la db)
-GET http://localhost:3000/productos/20
+GET http://localhost:3000/productos/28
 
 ### Agregar productos
 POST http://localhost:3000/productos/
 Content-Type: application/json
 
  {
-    "nombre": "Teclado Programable",
-    "precio": 100,
+    "nombre": "Botonera ElGato",
+    "precio": 325,
     "categoria": "Accesorios"
  }
 
+###Editar el precio de un producto
+PATCH http://localhost:3000/productos/66997c1511d7e5f25669c491
+Content-Type: application/json
+
+{
+    "precio": 666
+ }
+
 ###Borrar producto por su _id
-DELETE http://localhost:3000/productos/66902d85289af9fab80ed1f1
+DELETE http://localhost:3000/productos/6699762453b9e7a3dd276c7c
