@@ -13,12 +13,9 @@ app.get("/", (req, res) => {
 });
 
 // con /productos accedemos a toda la lista
-
 app.get("/productos", (req, res) => {
   const { categoria, nombre } = req.query;
-
   let filter = {};
-
   if (categoria) {
     filter = !categoria
       ? {}
@@ -26,16 +23,10 @@ app.get("/productos", (req, res) => {
           categoria: { $regex: `^${categoria.slice(0, 3)}`, $options: "i" },
         };
   }
+
   if (nombre) {
     filter = !nombre ? {} : { nombre: { $regex: nombre, $options: "i" } };
   }
-  // `^${nombre.slice(0, 3)}`
-
-  // Filtrar las categorias discriminando las mayusculas y con coincidencias en la palabra
-  // const filtro = !categoria
-  //   ? {}
-  //   : { categoria: { $regex: `^${categoria.slice(0, 3)}`, $options: "i" } }; // Buscamos las coincidencias con las tres primeras letras
-
   Computer.find(filter)
     .then((computacion) => {
       if ((categoria || nombre) && computacion.length === 0) {
@@ -56,7 +47,6 @@ app.get("/productos", (req, res) => {
 app.get("/productos/:id", (req, res) => {
   const { id } = req.params;
   const findCode = { codigo: id };
-
   Computer.find(findCode)
     .then((productID) => {
       if (findCode && productID.length === 0) {
@@ -80,30 +70,55 @@ app.get("/productos/:id", (req, res) => {
 //Agregar productos a la base de datos
 
 app.post("/productos", (req, res) => {
-  const newProduct = new Computer(req.body);
-  //Verificar si ya existe un producto con ese nombre
-  Computer.findOne({ nombre: newProduct.nombre }).then((nameProduct) => {
-    if (nameProduct) {
+  const { nombre } = req.body;
+  Computer.findOne({ nombre: nombre }).then((nameProduct) => {
+    if (nameProduct)
       return res.status(404).send("Este objeto ya está agregado");
-    }
 
-    newProduct
-      .save()
-      .then((saveNewProduct) => {
-        res.status(201).json(saveNewProduct);
-      })
-      .catch((error) => {
-        console.log("Hubo un error al agregar el producto", error);
-        res.status(500).send("Error al agregar el producto");
+    Computer.findOne()
+      .sort({ codigo: -1 })
+      .then((lastProduct) => {
+        const addNewCode = lastProduct ? lastProduct.codigo + 1 : 1;
+        const newProduct = new Computer({ codigo: addNewCode, ...req.body });
+        newProduct
+          .save()
+          .then((saveNewProduct) => {
+            res.status(201).json(saveNewProduct);
+          })
+          .catch((error) => {
+            console.log("Hubo un error al agregar el producto", error);
+            res.status(500).send("Error al agregar el producto");
+          });
       });
   });
+});
+
+//Actualizar precio
+// app.patch("/productos/:codigo", (req, res) => {
+//   const { codigo } = req.params;
+//   const { newPrice } = req.body;
+
+//   Computer.findOneAndUpdate(codigo);
+// });
+
+app.patch("/productos/:id", (req, res) => {
+  const { id } = req.params;
+
+  Computer.findByIdAndUpdate(id, req.body, { new: true })
+    .then((updatePrice) => {
+      console.log("Precio actualizado con éxito");
+      res.json(updatePrice);
+    })
+    .catch((error) => {
+      console.log("Error al actualizar el precio", error);
+      res.status(404).send("Hubo un problema en actualizar el precio");
+    });
 });
 
 //Eliminar un producto de la base de datos
 
 app.delete("/productos/:ID", (req, res) => {
   const { ID } = req.params;
-
   Computer.findByIdAndDelete(ID)
     .then((removeProduct) => {
       if (removeProduct) {
@@ -121,6 +136,8 @@ app.delete("/productos/:ID", (req, res) => {
       res.status(500).send("Error al eliminar el producto");
     });
 });
+
+//Error al acceder incorrectamente
 
 app.use((req, res) => {
   res.status(404).send("Error 404. Página no encontrada");
