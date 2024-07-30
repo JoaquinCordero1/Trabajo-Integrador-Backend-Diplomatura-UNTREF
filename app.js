@@ -55,7 +55,7 @@ app.get("/productos/:id", (req, res) => {
         );
         res
           .status(404)
-          .send("El producto no se encontró. Prueba buscando otro. ");
+          .send("El producto no se encontró. Prueba buscando otro.");
       } else {
         console.log("Búsqueda exitosa");
         res.json(productID);
@@ -92,14 +92,6 @@ app.post("/productos", (req, res) => {
       });
   });
 });
-
-//Actualizar precio
-// app.patch("/productos/:codigo", (req, res) => {
-//   const { codigo } = req.params;
-//   const { newPrice } = req.body;
-
-//   Computer.findOneAndUpdate(codigo);
-// });
 
 app.patch("/productos/:id", (req, res) => {
   const { id } = req.params;
