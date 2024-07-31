@@ -11,25 +11,25 @@ GET http://localhost:3000/productos?categoria=portatiles
 GET http://localhost:3000/productos?nombre=Cámara web
 
 
-### Obtener un producto por su id (Codigo en la db)
+### Obtener un producto por su id (Llamado Codigo en la db)
 GET http://localhost:3000/productos/28
 
 ### Agregar productos
-POST http://localhost:3000/productos/
+POST http://localhost:3000/productos/create
 Content-Type: application/json
 
  {
-    "nombre": "Botonera ElGato",
+    "nombre": "Botonera ElPerico",
     "precio": 325,
     "categoria": "Accesorios"
  }
 
 ###Editar el precio de un producto
-PATCH http://localhost:3000/productos/66997c1511d7e5f25669c491
+PATCH http://localhost:3000/productos/edit/66a97a3a5ce0fdf7d3e02f3e
 Content-Type: application/json
 
 {
-    "precio": 666
+    "precio": 669
  }
 
 ###Borrar producto por su _id
