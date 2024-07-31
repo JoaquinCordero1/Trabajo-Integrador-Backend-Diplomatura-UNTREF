@@ -69,7 +69,7 @@ app.get("/productos/:id", (req, res) => {
 
 //Agregar productos a la base de datos
 
-app.post("/productos", (req, res) => {
+app.post("/productos/create", (req, res) => {
   const { nombre } = req.body;
   Computer.findOne({ nombre: nombre }).then((nameProduct) => {
     if (nameProduct)
@@ -93,7 +93,8 @@ app.post("/productos", (req, res) => {
   });
 });
 
-app.patch("/productos/:id", (req, res) => {
+// Editar parcialmente un producto
+app.patch("/productos/edit/:id", (req, res) => {
   const { id } = req.params;
 
   Computer.findByIdAndUpdate(id, req.body, { new: true })
